@@ -1,0 +1,15 @@
+asgiref==3.3.4
+Django==3.2.3
+joblib
+numpy
+pandas
+Pillow
+psycopg2==2.8.6
+python-dateutil
+pytz==2021.1
+scikit-learn
+scipy
+six==1.16.0
+sklearn==0.0
+sqlparse==0.4.1
+threadpoolctl==2.1.0

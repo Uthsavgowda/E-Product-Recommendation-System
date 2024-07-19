@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <!-- Page Title-->
+    <div class="page-title-overlap bg-dark pt-4">
+        <div class="container d-lg-flex justify-content-between py-2 py-lg-3">
+            <div class="order-lg-2 mb-3 mb-lg-0 pt-lg-2">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb breadcrumb-light flex-lg-nowrap justify-content-center justify-content-lg-start">
+                        <li class="breadcrumb-item"><a class="text-nowrap" href="{% url 'apps.main:index' %}"><i class="ci-home"></i>Home</a></li>
+                        <li class="breadcrumb-item text-nowrap"><a href="shop-grid-ls.html">Shop</a>
+                        </li>
+                        <li class="breadcrumb-item text-nowrap active" aria-current="page">Checkout</li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="order-lg-1 pe-lg-4 text-center text-lg-start">
+                <h1 class="h3 text-light mb-0">Checkout</h1>
+            </div>
+        </div>
+    </div>
+    <div class="container pb-5 mb-2 mb-md-4">
+        <div class="row">
+            <section class="col-lg-8">
+                <!-- Steps-->
+                <div class="steps steps-light pt-2 pb-3 mb-5">
+                    <a class="step-item active" href="shop-cart.html">
+                        <div class="step-progress"><span class="step-count">1</span></div>
+                        <div class="step-label"><i class="ci-cart"></i>Sign Up</div>
+                    </a>
+                    <a class="step-item active current" href="checkout-details.html">
+                        <div class="step-progress"><span class="step-count">2</span></div>
+                        <div class="step-label"><i class="ci-user-circle"></i>Details</div>
+                    </a>
+                    <a class="step-item" href="checkout-shipping.html">
+                        <div class="step-progress"><span class="step-count">3</span></div>
+                        <div class="step-label"><i class="ci-package"></i>Shipping Info</div>
+                    </a>
+
+                </div>
+                <!-- Autor info-->
+
+                <!-- Shipping address-->
+                <form method="POST" class="needs-validation" enctype="multipart/form-data" novalidate>
+                    {% csrf_token %}                    <div class="bg-secondary rounded-3 p-4 mb-4">
+                        <div class="d-flex align-items-center">
+                            {% if profile.image %}
+                            <img class="rounded" src="{{profile.image.url}}" width="180" alt="{{user.first_name}} {{user.last_name}}"> {% endif %}
+                            <div class="ps-3">
+
+
+                                <div class="file-drop-area">
+                                    <div class="file-drop-icon ci-cloud-upload"></div>
+                                    <span class="file-drop-message">Drag and drop here to upload</span>
+                                    <input type="file" name="img" class="file-drop-input" accept="image/*" style="max-height: 50px;">
+                                    <button type="button" class="file-drop-btn btn btn-primary btn-sm">Or select file</button>
+                                </div>
+                                 </div>
+                        </div>
+                    </div>
+                    <div class="row gx-4 gy-3">
+                        <div class="col-sm-6">
+                            <label class="form-label" for="account-fn">First Name</label>
+                            <input class="form-control" type="text" id="account-fn" name="firstname" value="{{user.first_name}}">
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="form-label" for="account-ln">Last Name</label>
+                            <input class="form-control" type="text" id="account-ln" name="lastname" value="{{user.last_name}}">
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="form-label" for="account-email">Email Address</label>
+                            <input class="form-control" type="email" id="account-email" name="emailadd" value="{{user.email}}">
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="form-label" for="account-phone">Phone Number</label>
+                            <input class="form-control" type="text" id="account-phone" name="phoneno" value="{{ profile.mob_no}}" required>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="mb-3">
+                                <label class="form-label" for="checkout-city">Gender</label>
+                                <select class="form-select" id="checkout-city" name="gender">
+                  <option value="{{profile.gender}}">Choose Gender</option>
+                  <option value="M">Male</option>
+                  <option value="F">Female</option>
+                  <option value="O">Other</option>
+                  
+                </select>
+                            </div>
+
+                        </div>
+
+                        <div class="col-12">
+                            <hr class="mt-2 mb-3">
+                            <div class="d-flex flex-wrap justify-content-between align-items-center">
+
+                                <button class="btn btn-primary mt-3 mt-sm-0" type="submit">Update profile</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <!-- Navigation (desktop)-->
+
+            </section>
+            <!-- Sidebar-->
+
+        </div>
+        <!-- Navigation (mobile)-->
+        <div class="row d-lg-none">
+            <div class="col-lg-8">
+                <div class="d-flex pt-4 mt-3">
+                    <div class="w-50 pe-3"><a class="btn btn-secondary d-block w-100" href="shop-cart.html"><i class="ci-arrow-left mt-sm-0 me-1"></i><span class="d-none d-sm-inline">Back to Cart</span><span class="d-inline d-sm-none">Back</span></a></div>
+                    <div class="w-50 ps-2"><a class="btn btn-primary d-block w-100" href="checkout-shipping.html"><span class="d-none d-sm-inline">Proceed to Shipping</span><span class="d-inline d-sm-none">Next</span><i class="ci-arrow-right mt-sm-0 ms-1"></i></a></div>
+                </div>
+            </div>
+        </div>
+    </div>{% endblock %}

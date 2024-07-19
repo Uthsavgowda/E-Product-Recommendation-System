@@ -1,0 +1,156 @@
+
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <!-- Dashboard header-->
+    <div class="page-title-overlap bg-accent pt-4">
+      <div class="container d-flex flex-wrap flex-sm-nowrap justify-content-center justify-content-sm-between align-items-center pt-2">
+        <div class="d-flex align-items-center pb-3">
+                     <div class="ps-3">
+                <h1 class="text-light mb-0">{{user.first_name}} {{user.last_name}}</h1>
+            </div>
+        </div>
+        
+      </div>
+    </div>
+    <div class="container mb-5 pb-3">
+      <div class="bg-light shadow-lg rounded-3 overflow-hidden">
+        <div class="row">
+          <!-- Sidebar-->
+          <aside class="col-lg-4 pe-xl-5">
+            <!-- Account menu toggler (hidden on screens larger 992px)-->
+            <div class="d-block d-lg-none p-4"><a class="btn btn-outline-accent d-block" href="#account-menu" data-bs-toggle="collapse"><i class="ci-menu me-2"></i>Account menu</a></div>
+            <!-- Actual menu-->
+            <div class="h-100 border-end mb-2">
+              <div class="d-lg-block collapse" id="account-menu">
+                <div class="bg-secondary p-4">  
+                  <h3 class="fs-sm mb-0 text-muted">Account</h3>
+                </div>
+                <ul class="list-unstyled mb-0">
+                  <li class="border-bottom mb-0"><a class="nav-link-style d-flex align-items-center px-4 py-3" href="{% url 'apps.seller_accounts:profile' %}"><i class="ci-user-circle opacity-60 me-2"></i>Profile</a></li>
+                  <li class="border-bottom mb-0"><a class="nav-link-style d-flex align-items-center px-4 py-3" href="{% url 'apps.seller_accounts:companyinfo' %}"><i class="ci-briefcase opacity-60 me-2"></i>Company Info</a></li>
+                </ul>
+                <div class="bg-secondary p-4">
+                  <h3 class="fs-sm mb-0 text-muted">Seller Dashboard</h3>
+                </div>
+                <ul class="list-unstyled mb-0">
+                  <li class="border-bottom mb-0"><a class="nav-link-style d-flex align-items-center px-4 py-3" href="{% url 'apps.seller_accounts:sellerorders' %}"><i class="ci-dollar opacity-60 me-2"></i>Orders</a></li>
+                  <li class="border-bottom mb-0"><a class="nav-link-style d-flex align-items-center px-4 py-3" href="{% url 'apps.seller_accounts:companyproducts' %}"><i class="ci-package opacity-60 me-2"></i>Products</a></li>
+                  <li class="border-bottom mb-0"><a class="nav-link-style d-flex align-items-center px-4 py-3 active" href="{% url 'apps.seller_accounts:add_new_product' %}"><i class="ci-cloud-upload opacity-60 me-2"></i>Add New Product</a></li>
+                  <li class="mb-0"><a class="nav-link-style d-flex align-items-center px-4 py-3" href="{% url 'apps.seller_accounts:signout' %}"><i class="ci-sign-out opacity-60 me-2"></i>Sign out</a></li>
+                </ul>
+                <hr>
+              </div>
+            </div>
+          </aside>
+          <!-- Content-->
+          <section class="col-lg-8 pt-lg-4 pb-4 mb-3">
+            <div class="pt-2 px-4 ps-lg-0 pe-xl-5">
+              <ul class="nav nav-tabs nav-justified" role="tablist">
+                <li class="nav-item"><a class="nav-link px-0 active" href="#profile" data-bs-toggle="tab" role="tab">
+                    <div class="d-none d-lg-block"><i class="ci-package  opacity-60 me-2"></i>Add Single Product</div>
+                    <div class="d-lg-none text-center"><i class="ci-user opacity-60 d-block fs-xl mb-2"></i><span class="fs-ms">Profile</span></div></a></li>
+                <li class="nav-item"><a class="nav-link px-0" href="#notifications" data-bs-toggle="tab" role="tab">
+                    <div class="d-none d-lg-block"><i class="ci-add-document opacity-60 me-2"></i>Add Multiple Products</div>
+                    <div class="d-lg-none text-center"><i class="ci-bell opacity-60 d-block fs-xl mb-2"></i><span class="fs-ms">Notifications</span></div></a></li>
+                
+              </ul>
+              <!-- Title-->
+              <div class="d-sm-flex flex-wrap justify-content-between align-items-center pb-2">
+                <h2 class="h3 py-2 me-2 text-center text-sm-start">Add New Product</h2>
+                
+              </div>
+              <div class="tab-content">
+                <!-- Profile-->
+                <div class="tab-pane fade show active" id="profile" role="tabpanel">
+                  <form method="POST" action="{% url 'apps.seller_accounts:add_single_product' %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="mb-3 pb-2">
+                      <label class="form-label" for="unp-product-name">Product name *</label>
+                      <input class="form-control" type="text" id="unp-product-name" name="product_name">
+                      <div class="form-text">Maximum 100 characters. No HTML or emoji allowed.</div>
+                    </div>
+                    <div class="mb-3 pb-2">
+                      <label class="form-label" for="unp-product-name">Brand *</label>
+                      <input class="form-control" type="text" id="unp-product-name" name="product_brand">
+                      <div class="form-text">Maximum 100 characters. No HTML or emoji allowed.</div>
+                    </div>
+                    <div class="row">
+                      <div class="col-sm-6 mb-3">
+                        <label class="form-label" for="unp-extended-price">Product Market price *</label>
+                          <div class="input-group"><span class="input-group-text"><i class="ci-dollar"></i></span>
+                            <input class="form-control" type="text" id="unp-extended-price" name="product_market_price">
+                          </div>
+                      </div>
+                      <div class="col-sm-6 mb-3">
+                          <label class="form-label" for="unp-extended-price">Product Discount price *</label>
+                          <div class="input-group"><span class="input-group-text"><i class="ci-dollar"></i></span>
+                            <input class="form-control" type="text" id="unp-extended-price" name="product_discount_price">
+                          </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-sm-6 mb-3">
+                        <label class="form-label" for="unp-extended-price">Product Color *</label>
+                        <div class="input-group">
+                          <input class="form-control" type="text" id="unp-extended-price" name="product_color">
+                        </div>
+                      </div>
+                      <div class="col-sm-6 mb-3">
+                        <label class="form-label" for="unp-extended-price">Product Size *</label>
+                        <select class="form-select me-2" style="width: 5rem;" name="product_size">
+                          <option value="S">S</option>
+                          <option value="M">M</option>
+                          <option value="L">L</option>
+                          <option value="XL">XL</option>
+                          <option value="XXL">XXL</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="mb-3 pb-2">
+                      <label class="form-label" for="unp-product-name">Product Material</label>
+                      <input class="form-control" type="text" id="unp-product-name" name="product_material">
+                      <div class="form-text">Maximum 100 characters. No HTML or emoji allowed.</div>
+                    </div>
+                    <div class="mb-3 py-2">
+                      <label class="form-label" for="unp-product-description">Product description *</label>
+                      <textarea class="form-control" rows="6" id="unp-product-description" name="product_desc"></textarea>
+                    </div>
+                    <div class="mb-3 py-2">
+                      <label class="form-label" for="unp-product-description">Complete Look</label><spam><i>&nbsp;( Optional )</i></spam>
+                      <textarea class="form-control" rows="6" id="unp-product-description" name="product_complete_look"></textarea>
+                    </div>
+                    <div class="file-drop-area mb-3">
+                      <div class="file-drop-icon ci-cloud-upload"></div><span class="file-drop-message">Drag and drop here to upload product screenshot</span>
+                      <input class="file-drop-input" type="file" accept="image/*" name="product_img" multiple>
+                      <button class="file-drop-btn btn btn-primary btn-sm mb-2" type="button">Or select file</button>
+                      <div class="form-text">1000 x 800px ideal size for hi-res displays</div>
+                    </div>
+                    <div class="mb-3 py-2">
+                      <label class="form-label" for="unp-product-description">Product Image URL'S </label><spam><i>&nbsp;( Optional )</i></spam>
+                      <textarea class="form-control" rows="6" id="unp-product-img-url" name="product_img_urls" placeholder="Seprate URLS with ' | ' eg. https.url1.jpg | https.url2.jpg"></textarea>
+                    </div>                   <div class="row">
+                      
+                      
+                    </div>                    <button class="btn btn-primary d-block w-100" type="submit"><i class="ci-cloud-upload fs-lg me-2"></i>Upload Product</button>
+                  </form>
+                </div>
+                <div class="tab-pane fade" id="notifications" role="tabpanel">
+                  <form method="POST" action="{% url 'apps.seller_accounts:add_multiple_products' %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="mb-3 pb-2">
+                      <label class="form-label" for="unp-product-files">Product files for sale</label>
+                      <input class="form-control" type="file" id="unp-product-files" name="multi_product_file" required>
+                      <div class="form-text">Maximum file size is 1GB</div>
+                    </div>
+                    <button class="btn btn-primary d-block w-100" type="submit"><i class="ci-cloud-upload fs-lg me-2"></i>Upload Product</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+    <!-- Footer-->
+    {% endblock %}

@@ -1,0 +1,326 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+<!-- Page Title-->
+<div class="page-title-overlap bg-dark pt-4">
+    <div class="container d-lg-flex justify-content-between py-2 py-lg-3">
+        <div class="order-lg-2 mb-3 mb-lg-0 pt-lg-2">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb breadcrumb-light flex-lg-nowrap justify-content-center justify-content-lg-start">
+                    <li class="breadcrumb-item"><a class="text-nowrap" href="{% url 'apps.main:index' %}"><i
+                                class="ci-home"></i>Home</a></li>
+                    <li class="breadcrumb-item text-nowrap"><a href="#">Shop</a>
+                    </li>
+
+                </ol>
+            </nav>
+        </div>
+        <div class="order-lg-1 pe-lg-4 text-center text-lg-start">
+            <h1 class="h3 text-light mb-0">Shop</h1>
+        </div>
+    </div>
+</div>
+<div class="container pb-5 mb-2 mb-md-4">
+    <div class="row">
+        <!-- Sidebar-->
+        <aside class="col-lg-4">
+            <!-- Sidebar-->
+            <div class="offcanvas offcanvas-collapse bg-white w-100 rounded-3 shadow-lg py-1" id="shop-sidebar"
+                style="max-width: 22rem;">
+                <div class="offcanvas-cap align-items-center shadow-sm">
+                    <h2 class="h5 mb-0">Filters</h2>
+                    <button class="btn-close ms-auto" type="button" data-bs-dismiss="offcanvas"
+                        aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body py-grid-gutter px-lg-grid-gutter">
+
+                    <!-- Price range-->
+                    <div class="widget mb-4 pb-4 border-bottom">
+                        <h3 class="widget-title">Price</h3>
+                        <div class="range-slider" id="rangeFilter" data-start-min="{{minprice}}"
+                            data-start-max="{{maxprice}}" data-min="{{minprice}}" data-max="{{maxprice}}" data-step="1">
+                            <div class="range-slider-ui"></div>
+                            <div class="d-flex pb-1">
+                                <div class="w-50 pe-2 me-2">
+                                    <div class="input-group input-group-sm"><span class="input-group-text">₹</span>
+                                        <input class="form-control range-slider-value-min" id="minPrice" name="minPrice"
+                                            type="text">
+                                    </div>
+                                </div>
+                                <div class="w-50 ps-2">
+                                    <div class="input-group input-group-sm"><span class="input-group-text">₹</span>
+                                        <input class="form-control range-slider-value-max" id="maxPrice" name="maxPrice"
+                                            type="text">
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                            <button class="btn btn-primary d-block w-100" id="priceFilterBtn">Filter</button>
+                        </div>
+                    </div>
+
+                    <div class="widget widget-filter mb-4 pb-4 border-bottom">
+                        <h3 class="widget-title">Sort By</h3>
+
+                        <ul class="widget-list widget-filter-list list-unstyled pt-1" style="max-height: 11rem;"
+                            data-simplebar data-simplebar-auto-hide="false">
+
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" value="l_h_sort_by" id="sort_by"
+                                    data-filter="sort_by" name="radio">
+                                <label class="form-check-label" for="l_h_sort_by">Lowest - Highest Price</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" value="h_l_sort_by" id="sort_by"
+                                    data-filter="sort_by" name="radio">
+                                <label class="form-check-label" for="h_l_sort_by">Highest - Lowest Price</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" value="a_z_sort_by" id="sort_by"
+                                    data-filter="sort_by" name="radio">
+                                <label class="form-check-label" for="a_z_sort_by">A - Z</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" value="z_a_sort_by" id="sort_by"
+                                    data-filter="sort_by" name="radio">
+                                <label class="form-check-label" for="z_a_sort_by">Z - A</label>
+                            </div>
+                        </ul>
+                    </div>
+                    <!-- Filter by Gender-->
+                    <div class="widget widget-filter mb-4 pb-4 border-bottom">
+                        <h3 class="widget-title">Gender</h3>
+                        <div class="input-group input-group-sm mb-2">
+                            <input class="widget-filter-search form-control rounded-end pe-5" type="text"
+                                placeholder="Search"><i
+                                class="ci-search position-absolute top-50 end-0 translate-middle-y fs-sm me-3"></i>
+                        </div>
+                        <ul class="widget-list widget-filter-list list-unstyled pt-1" style="max-height: 11rem;"
+                            data-simplebar data-simplebar-auto-hide="false">
+                            {% for category in gender_cat %}
+                            <li class="widget-filter-item d-flex justify-content-between align-items-center mb-1">
+                                <div class="form-check">
+                                    <input class="form-check-input" id="gender_cat" data-filter="gender_category"
+                                        value="{{category.title}}" type="checkbox" id="size-xs">
+                                    <label class="form-check-label widget-filter-item-text"
+                                        for="size-xs">{{category.title}}</label>
+                                </div>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="widget widget-filter mb-4 pb-4 border-bottom">
+                        <h3 class="widget-title">Sub Category</h3>
+                        <div class="input-group input-group-sm mb-2">
+                            <input class="widget-filter-search form-control rounded-end pe-5" type="text"
+                                placeholder="Search"><i
+                                class="ci-search position-absolute top-50 end-0 translate-middle-y fs-sm me-3"></i>
+                        </div>
+                        <ul class="widget-list widget-filter-list list-unstyled pt-1" style="max-height: 11rem;"
+                            data-simplebar data-simplebar-auto-hide="false">
+                            {% for category in sub_category %}
+                            <li class="widget-filter-item d-flex justify-content-between align-items-center mb-1">
+                                <div class="form-check">
+                                    <input class="form-check-input" id="sub_cat" data-filter="sub_category"
+                                        value="{{category.title}}" type="checkbox" id="size-xs">
+                                    <label class="form-check-label widget-filter-item-text"
+                                        for="size-xs">{{category.title}}</label>
+                                </div>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="widget widget-filter mb-4 pb-4 border-bottom">
+                        <h3 class="widget-title">Article Type</h3>
+                        <div class="input-group input-group-sm mb-2">
+                            <input class="widget-filter-search form-control rounded-end pe-5" type="text"
+                                placeholder="Search"><i
+                                class="ci-search position-absolute top-50 end-0 translate-middle-y fs-sm me-3"></i>
+                        </div>
+                        <ul class="widget-list widget-filter-list list-unstyled pt-1" style="max-height: 11rem;"
+                            data-simplebar data-simplebar-auto-hide="false">
+                            {% for category in article_type %}
+                            <li class="widget-filter-item d-flex justify-content-between align-items-center mb-1">
+                                <div class="form-check">
+                                    <input class="form-check-input" id="article_type" data-filter="article_category"
+                                        value="{{category.title}}" type="checkbox" id="size-xs">
+                                    <label class="form-check-label widget-filter-item-text"
+                                        for="size-xs">{{category.title}}</label>
+                                </div>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+<!--                    <div class="widget widget-filter mb-4 pb-4 border-bottom">-->
+<!--                        <h3 class="widget-title">Brands</h3>-->
+<!--                        <div class="input-group input-group-sm mb-2">-->
+<!--                            <input class="widget-filter-search form-control rounded-end pe-5" type="text"-->
+<!--                                placeholder="Search"><i-->
+<!--                                class="ci-search position-absolute top-50 end-0 translate-middle-y fs-sm me-3"></i>-->
+<!--                        </div>-->
+<!--                        <ul class="widget-list widget-filter-list list-unstyled pt-1" style="max-height: 11rem;"-->
+<!--                            data-simplebar data-simplebar-auto-hide="false">-->
+<!--                            {% for category in brands %}-->
+<!--                            <li class="widget-filter-item d-flex justify-content-between align-items-center mb-1">-->
+<!--                                <div class="form-check">-->
+<!--                                    <input class="form-check-input" id="brand_cat" data-filter="brand_category"-->
+<!--                                        value="{{category.title}}" type="checkbox" id="size-xs">-->
+<!--                                    <label class="form-check-label widget-filter-item-text"-->
+<!--                                        for="size-xs">{{category.title}}</label>-->
+<!--                                </div><span class="fs-xs text-muted">34</span>-->
+<!--                            </li>-->
+<!--                            {% endfor %}-->
+<!--                        </ul>-->
+<!--                    </div>-->
+
+                </div>
+            </div>
+        </aside>
+        <!-- Content  -->
+        <section class="col-lg-8">
+            <!-- Toolbar-->
+            <div class="d-flex justify-content-center justify-content-sm-between align-items-center pt-2 pb-4 pb-sm-5">
+                <div class="d-flex flex-wrap">
+                    <div class="d-flex align-items-center flex-nowrap me-3 me-sm-4 pb-3">
+
+                        <h1 class="h3 text-light mb-0">All Fashion Products</h1>
+
+                    </div>
+                </div>
+
+            </div>
+            <!-- Products grid-->
+            <div class="row mx-n2" id="filteredProducts">
+                <p class="ajaxLoader">Loading...</p>
+                <!-- Product-->
+                {% for product in product_list %}
+                <div class="col-md-4 col-sm-6 px-2 mb-4">
+                    <div class="card product-card">
+                        <button class="btn-wishlist btn-sm" type="button" data-bs-toggle="tooltip"
+                            data-bs-placement="left" title="Add to wishlist"><i class="ci-heart"></i></button><a
+                            class="card-img-top d-block overflow-hidden"
+                            href="{% url 'apps.main:single_product' product.id %}">
+                            <div style="height:350px">
+                                {% if product.productimagesfiles_set.all %}
+                                {% for product_img in product.productimagesfiles_set.all|slice:":1" %}
+                                <img src="{{product_img.image_file.url}}" alt="Product">
+                                {%endfor%}
+                                {%else%}
+                                {% for product_img in product.productimagesurl_set.all|slice:":1" %}
+                                <img src="{{product_img.image_url}}" alt="Product">
+                                {%endfor%}
+                                {% endif %}
+
+                            </div>
+                        </a>
+                        <div class="card-body py-2"><a class="product-meta d-block fs-xs pb-1"
+                                href="#">{{product.category}}</a>
+                            <h3 class="product-title fs-sm"><a
+                                    href="{% url 'apps.main:single_product' product.id %}">{{product.title}}</a></h3>
+                        </div>
+                        <div class="d-flex justify-content-between">
+
+
+                            <div class="h5 text-dark mb-3" style="background-color: #edf1f2; font-weight: bold;">
+                                <div><span>Amazon</span>
+                                    <div class="product-price"><span>&#8377 {{product.discount_price}}</span></div>
+                                    <!--                         <div class="star-rating"><i class="star-rating-icon ci-star-filled active"></i> {{ product.ama_rating }}-->
+                                    <!--                      </div>-->
+                                </div>
+                            </div>
+
+                            <div class="h5 text-dark mb-3" style="background-color: #edf1f2; font-weight: bold;">
+                                <div><span>Flipkart</span>
+                                    <div class="product-price"><span>&#8377 {{product.ama_discount_price}}</span></div>
+                                    <!--                             <div class="star-rating"><i class="star-rating-icon ci-star-filled active"></i>{{ product.ama_rating|floatformat:"-1"|add:"-0.2" }}</div>-->
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class="card-body card-body-hidden">
+
+
+                            {% if user.is_staff %}
+                            <button class="btn btn-primary btn-sm d-block w-100 mb-2 disabled" type="button"><i
+                                    class="ci-cart fs-sm me-1"></i>Add to Cart</button>
+                            {% else %}
+                            <a href="{% url 'apps.cart:addtocart' product.id %}">
+                                <button class="btn btn-primary btn-sm d-block w-100 mb-2" type="button"><i
+                                        class="ci-cart fs-sm me-1"></i>Add to Cart</button>
+                            </a>
+                            {% endif %}
+
+                        </div>
+                    </div>
+                    <hr class="d-sm-none">
+                </div>
+                {% endfor %}
+
+                <hr class="my-3">
+                <!-- Pagination-->
+                <nav class="d-flex justify-content-between pt-2" aria-label="Page navigation">
+                    {% if product_list.has_previous %}
+                    <ul class="pagination">
+                        <li class="page-item"><a class="page-link"
+                                href="?page={{ product_list.previous_page_number }}"><i
+                                    class="ci-arrow-left me-2"></i>Prev</a></li>
+                    </ul>
+                    {% else %}
+                    <ul class="pagination" style="visibility:none">
+                        <li class="page-item"><a class="page-link" href="#"><i class="ci-arrow-left me-2"></i>Prev</a>
+                        </li>
+                    </ul>
+                    {% endif %}
+                    <ul class="pagination">
+                        {% if product_list.previous_page_number != 1 %}
+                        <li class="page-item d-none d-sm-block" aria-current="page"><a
+                                href="?page={{product_list.previous_page_number|add:" -1"}}">
+                                <span class="page-link">{{product_list.previous_page_number|add:"-1"}}<span
+                                        class="visually-hidden">(current)</span></span></a>
+                        </li>
+                        {% endif %}
+                        {% if product_list.number != 1 %}
+                        <li class="page-item d-none d-sm-block" aria-current="page"><a
+                                href="?page={{product_list.previous_page_number}}">
+                                <span class="page-link">{{product_list.previous_page_number}}<span
+                                        class="visually-hidden">(current)</span></span></a>
+                        </li>
+                        {% endif %}
+                        <li class="page-item active d-none d-sm-block" aria-current="page"><a
+                                href="?page={{product_list.number}}">
+                                <span class="page-link">{{product_list.number}}<span
+                                        class="visually-hidden">(current)</span></span></a>
+                        </li>
+                        {% if product_list.number != product_list.paginator.num_pages %}
+                        <li class="page-item d-none d-sm-block" aria-current="page"><a
+                                href="?page={{product_list.next_page_number}}">
+                                <span class="page-link">{{product_list.next_page_number}}<span
+                                        class="visually-hidden">(current)</span></span></a>
+                        </li>
+                        {% endif %}
+                        {% if product_list.next_page_number != product_list.paginator.num_pages %}
+                        <li class="page-item d-none d-sm-block" aria-current="page"><a
+                                href="?page={{product_list.next_page_number|add:" 1"}}">
+                                <span class="page-link">{{product_list.next_page_number|add:"1"}}<span
+                                        class="visually-hidden">(current)</span></span></a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                    {% if product_list.has_next %}
+                    <ul class="pagination">
+                        <li class="page-item"><a class="page-link" href="?page={{ product_list.next_page_number }}"
+                                aria-label="Next">Next<i class="ci-arrow-right ms-2"></i></a></li>
+                    </ul>
+                    {% else %}
+                    <ul class="pagination" style="visibility:none">
+                        <li class="page-item"><a class="page-link" href="#" aria-label="Next">Next<i
+                                    class="ci-arrow-right ms-2"></i></a></li>
+                    </ul>
+                    {% endif %}
+                </nav>
+            </div>
+        </section>
+
+    </div>
+</div>
+<!-- Footer-->
+{% endblock %}

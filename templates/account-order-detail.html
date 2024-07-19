@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <!-- Page Title-->
+    <div class="page-title-overlap bg-dark pt-4">
+      <div class="container d-lg-flex justify-content-between py-2 py-lg-3">
+        <div class="order-lg-2 mb-3 mb-lg-0 pt-lg-2">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-light flex-lg-nowrap justify-content-center justify-content-lg-start">
+              <li class="breadcrumb-item"><a class="text-nowrap" href="{% url 'apps.main:index' %}"><i class="ci-home"></i>Home</a></li>
+              <li class="breadcrumb-item text-nowrap"><a href="#">Account</a>
+              </li>
+              <li class="breadcrumb-item text-nowrap active" aria-current="page">Orders history</li>
+            </ol>
+          </nav>
+        </div>
+        <div class="order-lg-1 pe-lg-4 text-center text-lg-start">
+          <h1 class="h3 text-light mb-0">My orders</h1>
+        </div>
+      </div>
+    </div>
+    <div class="container pb-5 mb-2 mb-md-4">
+      <div class="row">
+        <!-- Sidebar-->
+         <aside class="col-lg-4 pt-4 pt-lg-0 pe-xl-5">
+              <div class="bg-white rounded-3 shadow-lg pt-1 mb-5 mb-lg-0">
+                  <div class="d-md-flex justify-content-between align-items-center text-center text-md-start p-4">
+                      <div class="d-md-flex align-items-center">
+                          <div class="img-thumbnail rounded-circle position-relative flex-shrink-0 mx-auto mb-2 mx-md-0 mb-md-0" style="width: 6.375rem;"><img class="rounded-circle" src="{{profile.image.url}}"></div>
+                          <div class="ps-md-3">
+                              <h3 class="fs-base mb-0">{{user.first_name}} {{user.last_name}}</h3><span class="text-accent fs-sm">{{user.email}}</span>
+                          </div>
+                      </div>
+
+                      <a class="btn btn-primary d-lg-none mb-2 mt-3 mt-md-0" href="#account-menu" data-bs-toggle="collapse" aria-expanded="false"><i class="ci-menu me-2"></i>Account menu</a>
+                  </div>
+                  <div class="d-lg-block collapse" id="account-menu">
+
+                      <div class="bg-secondary px-4 py-3">
+                          <h3 class="fs-sm mb-0 text-muted">Account settings</h3>
+                      </div>
+                      <ul class="list-unstyled mb-0">
+                          <li class="border-bottom mb-0"><a class="nav-link-style d-flex align-items-center px-4 py-3" href="{% url 'apps.accounts:profile' %}"><i class="ci-user opacity-60 me-2"></i>Profile info</a></li>
+                          <li class="border-bottom mb-0"><a class="nav-link-style d-flex align-items-center px-4 py-3" href="{% url 'apps.accounts:address' %}"><i class="ci-location opacity-60 me-2"></i>Address</a></li>
+                          <li class="border-bottom mb-0"><a class="nav-link-style d-flex align-items-center px-4 py-3" href="{% url 'apps.accounts:orders' %}"><i class="ci-bag opacity-60 me-2"></i>Orders</a></li>
+                          <li class="d-lg-none border-top mb-0"><a class="nav-link-style d-flex align-items-center px-4 py-3 active" href="{% url 'apps.accounts:signout' %}"><i class="ci-sign-out opacity-60 me-2"></i>Sign out</a></li>
+                      </ul>
+                  </div>
+              </div>
+          </aside>
+        <!-- Content  -->
+        <section class="col-lg-8">
+          <!-- Toolbar-->
+          <div class="d-flex justify-content-between align-items-center pt-lg-2 pb-4 pb-lg-5 mb-lg-3">
+            <div class="d-flex align-items-center">
+              <label class="d-none d-lg-block fs-sm text-light text-nowrap opacity-75 me-2" for="order-sort">Sort orders:</label>
+              <label class="d-lg-none fs-sm text-nowrap opacity-75 me-2" for="order-sort">Sort orders:</label>
+              <select class="form-select" id="order-sort">
+                <option>All</option>
+                <option>Delivered</option>
+                <option>In Progress</option>
+                <option>Delayed</option>
+                <option>Canceled</option>
+              </select>
+            </div><a class="btn btn-primary btn-sm d-none d-lg-inline-block" href="account-signin.html"><i class="ci-arrow-left me-2"></i>Go Back</a>
+          </div>
+           <div class="{% comment %} modal fade {% endcomment %}" id="order-details">
+      <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Order No - #ORDER_{{order.id}}</h5>
+            
+          </div>
+          <div class="modal-body pb-0">
+            <!-- Item-->
+             {% for cp in order.cart.cartproduct_set.all %}
+            <div class="d-sm-flex justify-content-between mb-4 pb-3 pb-sm-2 border-bottom">
+              <div class="d-sm-flex text-center text-sm-start"><a class="d-inline-block flex-shrink-0 mx-auto" href="shop-single-v1.html" style="width: 10rem;">
+                                        {% if cp.product.productimagesfiles_set.all %}
+                      {% for product_img in cp.product.productimagesfiles_set.all|slice:":1" %}
+                        <img src="{{product_img.image_file.url}}" width="180" alt="Product">
+                      {%endfor%}
+                    {%else%}
+                      {% for product_img in cp.product.productimagesurl_set.all|slice:":1" %}
+                        <img src="{{product_img.image_url}}" width="180" alt="Product">
+                      {%endfor%}
+                    {% endif %}
+              </a>
+                <div class="ps-sm-4 pt-2">
+                  <h3 class="product-title fs-base mb-2"><a href="shop-single-v1.html">{{cp.product.title}}</a></h3>
+                  <div class="fs-sm"><span class="text-muted me-2">Size:</span>8.5</div>
+                  <div class="fs-sm"><span class="text-muted me-2">Color:</span>White &amp; Blue</div>
+                  <div class="fs-lg text-accent pt-2">${{cp.rate}}</div>
+                </div>
+              </div>
+              <div class="pt-2 ps-sm-3 mx-auto mx-sm-0 text-center">
+                <div class="text-muted mb-2">Quantity:</div>{{cp.quantity}}
+              </div>
+              <div class="pt-2 ps-sm-3 mx-auto mx-sm-0 text-center">
+                <div class="text-muted mb-2">Subtotal</div>${{cp.subtotal}}
+              </div>
+            </div>
+            {% endfor %}
+            <!-- Item-->
+            
+          </div>
+          <!-- Footer-->
+          <div class="modal-footer flex-wrap justify-content-between bg-secondary fs-md">
+            <div class="px-2 py-1 fade"><span class="text-muted">Subtotal:&nbsp;</span><span>${{order.subtotal}}</span></div>
+            <div class="px-2 py-1 fade "><span class="text-muted">Shipping:&nbsp;</span><span>$0</span></div>
+            <div class="px-2 py-1 fade"><span class="text-muted">Tax:&nbsp;</span><span>$0</span></div>
+            <div class="px-2 py-1"><span class="text-muted">Total:&nbsp;</span><span class="fs-lg">${{order.total}}</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+          <!-- Orders list-->
+         
+        </section>
+      </div>
+    </div>{% endblock %}

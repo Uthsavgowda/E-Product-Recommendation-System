@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <!-- Page Title-->
+    <div class="page-title-overlap bg-dark pt-4">
+      <div class="container d-lg-flex justify-content-between py-2 py-lg-3">
+        <div class="order-lg-2 mb-3 mb-lg-0 pt-lg-2">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-light flex-lg-nowrap justify-content-center justify-content-lg-start">
+              <li class="breadcrumb-item"><a class="text-nowrap" href="{% url 'apps.main:index' %}"><i class="ci-home"></i>Home</a></li>
+              <li class="breadcrumb-item text-nowrap"><a href="#">Account</a>
+              </li>
+              <li class="breadcrumb-item text-nowrap active" aria-current="page">Profile info</li>
+            </ol>
+          </nav>
+        </div>
+        <div class="order-lg-1 pe-lg-4 text-center text-lg-start">
+          <h1 class="h3 text-light mb-0">Profile info</h1>
+        </div>
+      </div>
+    </div>
+    <div class="container pb-5 mb-2 mb-md-4">
+      <div class="row">
+        <!-- Sidebar-->
+        <aside class="col-lg-4 pt-4 pt-lg-0 pe-xl-5">
+            <div class="bg-white rounded-3 shadow-lg pt-1 mb-5 mb-lg-0">
+                <div class="d-md-flex justify-content-between align-items-center text-center text-md-start p-4">
+                    <div class="d-md-flex align-items-center">
+                        <div class="img-thumbnail rounded-circle position-relative flex-shrink-0 mx-auto mb-2 mx-md-0 mb-md-0" style="width: 6.375rem;"><img class="rounded-circle" src="{{profile.image.url}}"></div>
+                        <div class="ps-md-3">
+                            <h3 class="fs-base mb-0">{{user.first_name}} {{user.last_name}}</h3><span class="text-accent fs-sm">{{user.email}}</span>
+                        </div>
+                    </div>
+
+                    <a class="btn btn-primary d-lg-none mb-2 mt-3 mt-md-0" href="#account-menu" data-bs-toggle="collapse" aria-expanded="false"><i class="ci-menu me-2"></i>Account menu</a>
+                </div>
+                <div class="d-lg-block collapse" id="account-menu">
+
+                    <div class="bg-secondary px-4 py-3">
+                        <h3 class="fs-sm mb-0 text-muted">Account settings</h3>
+                    </div>
+                    <ul class="list-unstyled mb-0">
+                        <li class="border-bottom mb-0"><a class="nav-link-style d-flex align-items-center px-4 py-3 active" href="{% url 'apps.accounts:profile' %}"><i class="ci-user opacity-60 me-2"></i>Profile info</a></li>
+                        <li class="border-bottom mb-0"><a class="nav-link-style d-flex align-items-center px-4 py-3" href="{% url 'apps.accounts:address' %}"><i class="ci-location opacity-60 me-2"></i>Address</a></li>
+                        <li class="border-bottom mb-0"><a class="nav-link-style d-flex align-items-center px-4 py-3" href="{% url 'apps.accounts:orders' %}"><i class="ci-bag opacity-60 me-2"></i>Orders</a></li>
+                        <li class="d-lg-none border-top mb-0"><a class="nav-link-style d-flex align-items-center px-4 py-3" href="{% url 'apps.accounts:signout' %}"><i class="ci-sign-out opacity-60 me-2"></i>Sign out</a></li>
+                    </ul>
+                </div>
+            </div>
+        </aside>
+        <!-- Content  -->
+        <section class="col-lg-8">
+          <!-- Toolbar-->
+          <div class="d-none d-lg-flex justify-content-between align-items-center pt-lg-3 pb-4 pb-lg-5 mb-lg-3">
+            <h6 class="fs-base text-light mb-0">Update you profile details below:</h6><a class="btn btn-primary btn-sm" href="{% url 'apps.accounts:signout' %}"><i class="ci-sign-out me-2"></i>Sign out</a>
+          </div>
+          <!-- Profile form-->
+          
+          <form method="POST" class="needs-validation" enctype="multipart/form-data" novalidate>
+                    {% csrf_token %}
+                    <div class="bg-secondary rounded-3 p-4 mb-4">
+                        <div class="d-flex align-items-center">
+                            {% if profile.image %}
+                            <img class="rounded" src="{{profile.image.url}}" width="180" alt="{{user.first_name}} {{user.last_name}}"> {% endif %}
+                            <div class="ps-3">
+
+
+                                <div class="file-drop-area">
+                                    <div class="file-drop-icon ci-cloud-upload"></div>
+                                    <span class="file-drop-message">Drag and drop here to upload</span>
+                                    <input type="file" name="img" class="file-drop-input" accept="image/*" style="max-height: 50px;">
+                                    <button type="button" class="file-drop-btn btn btn-primary btn-sm">Or select file</button>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row gx-4 gy-3">
+                        <div class="col-sm-6">
+                            <label class="form-label" for="account-fn">First Name</label>
+                            <input class="form-control" type="text" id="account-fn" name="firstname" value="{{user.first_name}}">
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="form-label" for="account-ln">Last Name</label>
+                            <input class="form-control" type="text" id="account-ln" name="lastname" value="{{user.last_name}}">
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="form-label" for="account-email">Email Address</label>
+                            <input class="form-control" type="email" id="account-email" name="emailadd" value="{{user.email}}">
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="form-label" for="account-phone">Phone Number</label>
+                            <input class="form-control" type="text" id="account-phone" name="phoneno" value="{{ profile.mob_no}}" required>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="mb-3">
+                                <label class="form-label" for="checkout-city">Gender</label>({{profile.gender}})
+                                <select class="form-select" id="checkout-city" name="gender">
+                  <option value="{{profile.gender}}">Choose Gender</option>
+                  <option value="M">Male</option>
+                  <option value="F">Female</option>
+                  <option value="O">Other</option>
+                  
+                </select>
+                            </div>
+
+                        </div>
+
+                        <div class="col-12">
+                            <hr class="mt-2 mb-3">
+                            <div class="d-flex flex-wrap justify-content-between align-items-center">
+
+                                <button class="btn btn-primary mt-3 mt-sm-0" type="submit">Update profile</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+        </section>
+      </div>
+    </div>
+    <!-- Footer-->
+    {% endblock %}
